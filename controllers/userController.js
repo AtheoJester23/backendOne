@@ -1,6 +1,6 @@
 import Users from "../models/users.js";
 import express from "express";
-import bcrypt from "bcrypt";
+import bcrypt, { hash } from "bcrypt";
 
 //GET all:
 export const getUsers = async (req, res) => {
@@ -51,6 +51,42 @@ export const createUser = async (req, res) => {
 
     res.status(201).json({
       message: "Account Successfully Created...",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//PATCH request:
+export const updateUser = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    if (name && name.trim() !== "") {
+      req.user.name = name;
+    }
+
+    if (email && email.trim() !== "") {
+      req.user.email = email;
+    }
+
+    if (password && password.trim() !== "") {
+      //hashpassword:
+      const saltrounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltrounds);
+
+      req.user.password = hashedPassword;
+    }
+
+    //Update User Account Details:
+    const updatedUser = await req.user.save();
+
+    //Exclude Password From The Response:
+    const { password: _, ...data } = updatedUser.toObject();
+
+    res.status(200).json({
+      message: "User Details Updated Successfully.",
       data,
     });
   } catch (error) {

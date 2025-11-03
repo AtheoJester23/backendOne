@@ -6,6 +6,7 @@ import {
   createUser,
   getSpecificUser,
   getUsers,
+  updateUser,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -18,6 +19,9 @@ router.post("/", createUser);
 
 //GET Specific user:
 router.get("/:id", findUser, getSpecificUser);
+
+//PATCH Request:
+router.patch("/:id", findUser, updateUser);
 
 //Middleware:
 export async function findUser(req, res, next) {
