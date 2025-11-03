@@ -4,6 +4,7 @@ import Users from "../models/users.js";
 //Controllers:
 import {
   createUser,
+  deleteUser,
   getSpecificUser,
   getUsers,
   updateUser,
@@ -22,6 +23,9 @@ router.get("/:id", findUser, getSpecificUser);
 
 //PATCH Request:
 router.patch("/:id", findUser, updateUser);
+
+//DELETE Request:
+router.delete("/:id", findUser, deleteUser);
 
 //Middleware:
 export async function findUser(req, res, next) {
