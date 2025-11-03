@@ -1,6 +1,6 @@
 import Users from "../models/users.js";
-import express from "express";
 import bcrypt, { hash } from "bcrypt";
+import validator from "validator";
 
 //GET all:
 export const getUsers = async (req, res) => {
@@ -25,6 +25,11 @@ export const createUser = async (req, res) => {
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All inputs are required..." });
+    }
+
+    //Validate email:
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ message: "Email is invalid" });
     }
 
     const userExist = await Users.findOne({ email });
@@ -67,8 +72,13 @@ export const updateUser = async (req, res) => {
       req.user.name = name;
     }
 
-    if (email && email.trim() !== "") {
-      req.user.email = email;
+    //Validate Email:
+    if (email) {
+      if (validator.isEmail(email)) {
+        req.user.email = email;
+      } else {
+        return res.status(400).json({ message: "Invalid Email Address" });
+      }
     }
 
     if (password && password.trim() !== "") {
