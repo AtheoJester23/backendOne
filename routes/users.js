@@ -2,17 +2,22 @@ import express from "express";
 import Users from "../models/users.js";
 
 //Controllers:
-import { getSpecificUser, getUsers } from "../controllers/userController.js";
+import {
+  createUser,
+  getSpecificUser,
+  getUsers,
+} from "../controllers/userController.js";
 
 const router = express.Router();
 
 //GET Request:
 router.get("/", getUsers);
 
+//POST Request:
+router.post("/", createUser);
+
 //GET Specific user:
 router.get("/:id", findUser, getSpecificUser);
-
-//POST Request:
 
 //Middleware:
 export async function findUser(req, res, next) {

@@ -34,6 +34,25 @@ export const createUser = async (req, res) => {
 
     //Hash password:
     const saltRound = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRound);
+
+    //Account overview:
+    const createdAccount = new Users({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    //Create the account:
+    const addedAccount = await createdAccount.save();
+
+    //Exclude password from the response:
+    const { password: _, ...data } = addedAccount.toObject();
+
+    res.status(201).json({
+      message: "Account Successfully Created...",
+      data,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
