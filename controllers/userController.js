@@ -114,3 +114,43 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+//--------------------------------------------------------------------
+//Login:
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "All inputs are required..." });
+    }
+
+    //Email Validation:
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ message: "Invalid Email Address" });
+    }
+
+    //Check if the user exist:
+    const userExist = await Users.findOne({ email }).select("+password");
+    if (!userExist) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    //Check password:
+    const isMatch = await bcrypt.compare(password, userExist.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    //Exclude Password from response
+    const { password: _, ...data } = userExist.toObject();
+
+    //Send Response:
+    res.status(200).json({
+      message: "Login Successful",
+      user: data,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

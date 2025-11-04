@@ -7,10 +7,13 @@ import {
   deleteUser,
   getSpecificUser,
   getUsers,
+  loginUser,
   updateUser,
 } from "../controllers/userController.js";
 
 const router = express.Router();
+
+//Sign-Up Routes
 
 //GET Request:
 router.get("/", getUsers);
@@ -26,6 +29,10 @@ router.patch("/:id", findUser, updateUser);
 
 //DELETE Request:
 router.delete("/:id", findUser, deleteUser);
+
+//-------------------------------------------------------------
+//Login Route:
+router.post("/login", loginUser);
 
 //Middleware:
 export async function findUser(req, res, next) {
