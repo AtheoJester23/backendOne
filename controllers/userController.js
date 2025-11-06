@@ -1,6 +1,7 @@
 import Users from "../models/users.js";
 import bcrypt, { hash } from "bcrypt";
 import validator from "validator";
+import jwt from "jsonwebtoken";
 
 //GET all:
 export const getUsers = async (req, res) => {
@@ -145,10 +146,18 @@ export const loginUser = async (req, res) => {
     //Exclude Password from response
     const { password: _, ...data } = userExist.toObject();
 
+    //JWT Generation:
+    const token = jwt.sign(
+      { id: userExist._id, email: userExist.email },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+
     //Send Response:
     res.status(200).json({
       message: "Login Successful",
       user: data,
+      token,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
