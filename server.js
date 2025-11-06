@@ -6,6 +6,8 @@ import cors from "cors";
 //Import routers:
 import userRouter from "./routes/users.js";
 import productsRouter from "./routes/products.js";
+import { verifyToken } from "./middlewares/verifyToken.js";
+import loginRouter from "./routes/login.js";
 
 //dotenv configuration:
 dotenv.config();
@@ -35,7 +37,9 @@ mongoose
 
 app.use(express.json());
 
-app.use("/users", userRouter);
+app.use("/login", loginRouter);
+
+app.use("/users", verifyToken, userRouter);
 
 app.use("/products", productsRouter);
 
