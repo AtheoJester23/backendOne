@@ -32,3 +32,14 @@ export const addProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+//READ:
+export const getProducts = async (req, res) => {
+  try {
+    const allProducts = Products.find();
+
+    res.status(200).json(allProducts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
