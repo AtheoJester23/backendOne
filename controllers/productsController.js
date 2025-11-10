@@ -36,9 +36,25 @@ export const addProduct = async (req, res) => {
 //READ:
 export const getProducts = async (req, res) => {
   try {
-    const allProducts = Products.find();
+    const allProducts = await Products.find();
 
     res.status(200).json(allProducts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//UPDATE:
+export const updateProd = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    const item = await Products.find(name);
+    if (!item) {
+      return res
+        .status(404)
+        .json({ message: "That products does not exist yet." });
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
