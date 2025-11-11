@@ -59,3 +59,21 @@ export const updateProd = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+//DELETE
+export const deleteProd = async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    const doesProdExist = await Products.findById(_id);
+    if (doesProdExist == null) {
+      return res.status(404).json({ message: "That product does not exist" });
+    }
+
+    await doesProdExist.deleteOne();
+
+    res.status(200).json({ message: "Product Deleted Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
