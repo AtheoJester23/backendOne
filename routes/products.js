@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addProduct,
   deleteProd,
   getAProduct,
   getProducts,
@@ -13,6 +14,9 @@ router.get("/", getProducts);
 
 //GET Specific Product:
 router.get("/:id", findProd, getAProduct);
+
+//POST New Product:
+router.post("/", addProduct);
 
 //DELETE a product:
 router.delete("/", deleteProd);
