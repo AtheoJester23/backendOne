@@ -44,6 +44,15 @@ export const getProducts = async (req, res) => {
   }
 };
 
+//READ Specific product:
+export const getAProduct = async (req, res) => {
+  try {
+    res.status(200).json(req.products);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 //UPDATE:
 export const updateProd = async (req, res) => {
   try {
@@ -64,6 +73,12 @@ export const updateProd = async (req, res) => {
 export const deleteProd = async (req, res) => {
   try {
     const { _id } = req.body;
+
+    if (!_id) {
+      return res
+        .status(401)
+        .json({ message: "Id is required to delete the product." });
+    }
 
     const doesProdExist = await Products.findById(_id);
     if (doesProdExist == null) {
