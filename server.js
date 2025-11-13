@@ -37,12 +37,20 @@ mongoose
 
 app.use(express.json());
 
+//routes:
 app.use("/login", loginRouter);
-
 app.use("/users", verifyToken, userRouter);
-
 app.use("/products", productsRouter);
 
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "Testing" });
+  res.status(200).send("<h1>Welcome to DatabaseOne</h1>");
+});
+
+//404 handler:
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found",
+    path: req.originalUrl,
+  });
 });
